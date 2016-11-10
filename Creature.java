@@ -15,8 +15,7 @@ public class Creature extends Actor
     private int deathTimer;
     private boolean canKill;
     private int timeSinceLastAttack;
-    private GameBoard gameBoard;        
-    private int imageCounter;
+    private GameBoard gameBoard;
     
     /**
      * The default constructor for the creature class.
@@ -26,6 +25,7 @@ public class Creature extends Actor
         this.health = health;
         this.damage = damage;
         this.speed = speed;
+        this.setImage(new GreenfootImage("Player.png")); // Sæt creature billedet ind her.
     }    
     
     /**
@@ -87,7 +87,7 @@ public class Creature extends Actor
      */
     public void move()
     {   
-        if (this.isTouching(Player.class) || this.isPuking)
+        if (this.isTouching(Player.class))
             return;
         // Follow the player on the x-axis    
         if (this.getX() > gameBoard.getPlayer().getX())
@@ -128,7 +128,7 @@ public class Creature extends Actor
     {
         if (!this.isAlive)
         {
-            this.setImage("boy1.png");
+            this.setImage("boy1.png"); // Smid billede ind af den døde zombie her.
         }
     }
     
@@ -137,35 +137,10 @@ public class Creature extends Actor
         Actor intersectingObject = this.getOneIntersectingObject(Player.class);
         if (intersectingObject != null && timeSinceLastAttack > 70)
         {
-            puke();
             gameBoard.getPlayer().setHealth(gameBoard.getPlayer().getHealth() - this.damage);
             timeSinceLastAttack = 0;
         }
         timeSinceLastAttack++;
-        imageCounter++;
-    }
-    private boolean isPuking;
-    /**
-     * Simulate an attack by wiggling.
-     */
-    public void puke()
-    {
-        if (imageCounter < 100)
-        {
-            this.setImage("Player.png");
-        }
-            
-        if (imageCounter > 100)
-        {
-            this.setImage("boy1.png");
-            isPuking = true;
-        }
-        
-        if (imageCounter > 200)
-        {
-            imageCounter = 0;
-            isPuking = false;
-        }
     }
     
     public boolean isAlive()

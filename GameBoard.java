@@ -112,7 +112,7 @@ public class GameBoard extends World
             int x = 0;
             int y = Greenfoot.getRandomNumber(1000);
             int rand = Greenfoot.getRandomNumber(1000);
-            creature = new Creature((20 + Greenfoot.getRandomNumber(75)), Greenfoot.getRandomNumber(20), 1 + Greenfoot.getRandomNumber(2));
+            creature = new Creature((20 + Greenfoot.getRandomNumber(75)), Greenfoot.getRandomNumber(8), 1 + Greenfoot.getRandomNumber(2));
             if (rand > 500)
                 x = - Greenfoot.getRandomNumber(1000);
             else
