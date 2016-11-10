@@ -1,2 +1,2 @@
-# Apocalypse-3.0
-Third version
+# MonsterApocalypse
+A top down shooting game, with creatures, weapons, power-ups and with a high score
