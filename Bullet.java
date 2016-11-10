@@ -10,6 +10,7 @@ public class Bullet extends Actor
 {
     private int rotation;
     private boolean hasBulletCollidedWithCreature;
+    GameBoard gameBoard;
     
     /**
      * Default bullet constructor.
@@ -26,9 +27,13 @@ public class Bullet extends Actor
      */
     public void act() 
     {
+        gameBoard = (GameBoard) this.getWorld();
         // Add your action code here.
-        moveBullet();
-        removeBullet();
+        if (gameBoard != null)
+        {
+            moveBullet();
+            removeBullet();
+        }
     }
     
     /**
@@ -55,7 +60,7 @@ public class Bullet extends Actor
      */
     public int getDamage()
     {
-        GameBoard gameBoard = (GameBoard) this.getWorld();
+
         if (gameBoard != null)
         {
             Weapon weapon = gameBoard.getPlayer().getCurrentWeapon();
@@ -79,9 +84,12 @@ public class Bullet extends Actor
     public boolean hasBulletCollidedWithCreature()
     {
         Creature intersectingCreature = (Creature) this.getOneIntersectingObject(Creature.class);
-        if (intersectingCreature != null)
+        if (intersectingCreature != null && intersectingCreature.canBeShot())
         {
-            intersectingCreature.setHealth(intersectingCreature.getHealth() - getDamage());
+            int creatureHealth = intersectingCreature.getHealth();
+            intersectingCreature.setHealth(creatureHealth - getDamage());
+            if (!intersectingCreature.isAlive())
+                gameBoard.getPlayer().setScore(gameBoard.getPlayer().getScore() + 15 + creatureHealth);
             return true;            
         }
         else

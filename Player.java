@@ -35,7 +35,7 @@ public class Player extends Actor
     private void init()
     {
        speed = 2;
-       health = 3;
+       health = 100;
        armor = 0;
        score = 0;
        startWeapon = new Pistol();
@@ -55,6 +55,7 @@ public class Player extends Actor
         turnTowardsMouse();
         pickupWeapon();
         shoot();
+        die();
     }
     
     /**
@@ -118,7 +119,7 @@ public class Player extends Actor
      */
     public void setScore(int amount)
     {
-        this.score = score;
+        this.score = amount;
     }
     
     /**
@@ -203,10 +204,45 @@ public class Player extends Actor
             // Set space as the default key for shooting.
             if (Greenfoot.isKeyDown("space"))
             {
-                Bullet bullet = new Bullet();
-                bullet.setRotation(this.getRotation());
-                this.getWorld().addObject(bullet, getX(), getY());
+                if (currentWeapon instanceof Shotgun)
+                {
+                    for (int i = 0; i < 5; i++)
+                    {
+                        Bullet bullet = new Bullet();
+                        bullet.setRotation(this.getRotation());
+                        switch (i)
+                        {
+                            case 0:
+                                bullet.turn(-10);
+                                break;
+                            case 1:
+                                bullet.turn(-5);
+                                break;
+                            case 2:
+                                bullet.turn(0);
+                                break;
+                            case 3:
+                                bullet.turn(5);
+                                break;
+                            case 4:
+                                bullet.turn(10);
+                                break;
+                            default:
+                                break;
+                        }
+                        this.getWorld().addObject(bullet, getX(), getY());
+                    }
+                }
+                else
+                {
+                    Bullet bullet = new Bullet();
+                    bullet.setRotation(this.getRotation());
+                    this.getWorld().addObject(bullet, getX(), getY());
+                }
+
                 actCount = 0;
+                if (currentWeapon != null && !currentWeapon.sound().isPlaying())
+                    currentWeapon.sound().play();
             }
         }
         actCount++;
@@ -234,6 +270,14 @@ public class Player extends Actor
         if (currentWeapon instanceof SMG)
         {
             this.setImage(new GreenfootImage("Player4.png"));
+        }
+    }
+    
+    public void die()
+    {
+        if (this.health <= 0)
+        {
+            Greenfoot.stop();
         }
     }
 }

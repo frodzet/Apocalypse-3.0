@@ -11,6 +11,7 @@ public class Pistol extends Weapon
     private static final int PISTOL_DAMAGE = 9;
     private static final int PISTOL_FIRE_RATE = 20;
     private static final int PISTOL_RELOAD_TIME = 1;
+    private static final int PISTOL_CLIP_SIZE = 7;
     private GreenfootImage weaponImage;
     
     public Pistol()
@@ -32,5 +33,15 @@ public class Pistol extends Weapon
     public int reloadTime()
     {
         return PISTOL_RELOAD_TIME;
+    }
+    
+    public int clipSize()
+    {
+        return PISTOL_CLIP_SIZE;
+    }
+    
+    public GreenfootSound sound()
+    {
+        return new GreenfootSound("Pistol.mp3");
     }
 }

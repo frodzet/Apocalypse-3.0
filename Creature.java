@@ -12,14 +12,17 @@ public class Creature extends Actor
     private int health;
     private int damage;
     private boolean isAlive;
-    private GameBoard gameBoard;
+    private int deathTimer;
+    private boolean canKill;
+    private int timeSinceLastAttack;
+    private GameBoard gameBoard;        
+    private int imageCounter;
     
     /**
      * The default constructor for the creature class.
      */
     public Creature(int health, int damage, int speed)
-    {
-        
+    {        
         this.health = health;
         this.damage = damage;
         this.speed = speed;
@@ -35,8 +38,15 @@ public class Creature extends Actor
         // Just making absolutely sure the gameWorld actually exist.
         if (gameBoard != null)
         {
-            turnTowardsPlayer();
-            move();
+            if (isAlive())
+            {
+                turnTowardsPlayer();
+                move();
+                attack();
+                kill();
+
+            }
+            timeSinceDeath();
         }
     }
     
@@ -76,7 +86,9 @@ public class Creature extends Actor
      * Move the creature towards the player's position.
      */
     public void move()
-    {           
+    {   
+        if (this.isTouching(Player.class) || this.isPuking)
+            return;
         // Follow the player on the x-axis    
         if (this.getX() > gameBoard.getPlayer().getX())
         {
@@ -103,6 +115,86 @@ public class Creature extends Actor
      */
     public void turnTowardsPlayer()
     {
+        if (this.isTouching(Player.class))
+            return;
+            
         this.turnTowards(gameBoard.getPlayer().getX(), gameBoard.getPlayer().getY());
+    }
+    
+    /**
+     * Kill the creature.
+     */
+    public void kill()
+    {
+        if (!this.isAlive)
+        {
+            this.setImage("boy1.png");
+        }
+    }
+    
+    public void attack()
+    {
+        Actor intersectingObject = this.getOneIntersectingObject(Player.class);
+        if (intersectingObject != null && timeSinceLastAttack > 70)
+        {
+            puke();
+            gameBoard.getPlayer().setHealth(gameBoard.getPlayer().getHealth() - this.damage);
+            timeSinceLastAttack = 0;
+        }
+        timeSinceLastAttack++;
+        imageCounter++;
+    }
+    private boolean isPuking;
+    /**
+     * Simulate an attack by wiggling.
+     */
+    public void puke()
+    {
+        if (imageCounter < 100)
+        {
+            this.setImage("Player.png");
+        }
+            
+        if (imageCounter > 100)
+        {
+            this.setImage("boy1.png");
+            isPuking = true;
+        }
+        
+        if (imageCounter > 200)
+        {
+            imageCounter = 0;
+            isPuking = false;
+        }
+    }
+    
+    public boolean isAlive()
+    {
+        if (this.health > 0)
+            isAlive = true;
+        else
+            isAlive = false;
+
+        return this.isAlive;
+    }
+    
+    public boolean canBeShot()
+    {
+        if (this.isAlive())
+            canKill = true;
+        else
+            canKill = false;
+            
+        return canKill;
+    }
+    
+    public int timeSinceDeath()
+    {
+        if (!this.isAlive())
+        {
+            deathTimer++;
+        }
+
+        return deathTimer;
     }
 }

@@ -11,6 +11,7 @@ public class MG extends Weapon
     private static final int MG_DAMAGE = 15;
     private static final int MG_FIRE_RATE = 5;
     private static final int MG_RELOAD_TIME = 1;
+    private static final int MG_CLIP_SIZE = 45;
     private GreenfootImage weaponImage;
     
     public MG()
@@ -32,5 +33,15 @@ public class MG extends Weapon
     public int reloadTime()
     {
         return MG_RELOAD_TIME;
+    }
+    
+    public int clipSize()
+    {
+        return MG_CLIP_SIZE;
+    }
+    
+    public GreenfootSound sound()
+    {
+        return new GreenfootSound("MG.mp3");
     }
 }

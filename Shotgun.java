@@ -11,6 +11,7 @@ public class Shotgun extends Weapon
     private static final int SHOTGUN_DAMAGE = 15;
     private static final int SHOTGUN_FIRE_RATE = 50;
     private static final int SHOTGUN_RELOAD_TIME = 1;
+    private static final int SHOTGUN_CLIP_SIZE = 2;
     private GreenfootImage weaponImage;
     
     public Shotgun()
@@ -32,5 +33,15 @@ public class Shotgun extends Weapon
     public int reloadTime()
     {
         return SHOTGUN_RELOAD_TIME;
+    }
+    
+    public int clipSize()
+    {
+        return SHOTGUN_CLIP_SIZE;
+    }
+    
+    public GreenfootSound sound()
+    {
+        return new GreenfootSound("Shotgun.mp3");
     }
 }
